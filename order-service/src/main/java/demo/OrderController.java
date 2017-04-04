@@ -1,5 +1,6 @@
 package demo;
 
+import demo.adapter.User;
 import demo.adapter.UserAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,11 @@ public class OrderController {
     @GetMapping("/order/user/{userId}")
     public List<Order> getOrdersByUserId(@PathVariable long userId) {
 
+        User user = this.userAdapter.getUserDetail(userId);
+        
         List<Order> orderList = this.orderRepository.findByUserId(userId);
         for (Order order: orderList) {
-            order.setUser( this.userAdapter.getUserDetail(order.getUserId()) );
+            order.setUser(user);
         }
 
         return  orderList;
